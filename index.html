@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Santa Cruz Acessível — protótipo escolar de participação cidadã para mobilidade e acessibilidade.">
+  <title>Santa Cruz Acessível</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="brand" href="#inicio" aria-label="Santa Cruz Acessível - início">
+    <span class="brand-mark">♿</span><span>Santa Cruz <strong>Acessível</strong></span>
+  </a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">☰</button>
+  <nav id="mainNav">
+    <a href="#inicio">Início</a><a href="#mapa">Mapa</a><a href="#registrar">Registrar problema</a>
+    <a href="#como-funciona">Como funciona</a><a href="#solucoes">Soluções</a><a href="#sobre">Sobre o projeto</a>
+    <a class="btn btn-small btn-dark" href="#prefeitura">🏛️ Área da Prefeitura</a>
+  </nav>
+</header>
+
+<main>
+<section id="inicio" class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">PROTÓTIPO ESCOLAR • DESIGN THINKING</span>
+    <h1>Uma cidade melhor começa quando conseguimos <span>enxergar seus obstáculos.</span></h1>
+    <p>Ajude a identificar problemas de acessibilidade e mobilidade em Santa Cruz do Rio Pardo. Registre um problema, acompanhe seu andamento e contribua para uma cidade melhor para todos.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="#registrar">📍 Registrar um problema</a><a class="btn btn-outline" href="#mapa">🗺️ Ver mapa</a></div>
+    <div class="hero-trust"><span>✓ Participação cidadã</span><span>✓ Acompanhamento público</span><span>✓ Foco em acessibilidade</span></div>
+  </div>
+  <div class="hero-art" aria-label="Ilustração de uma cidade acessível">
+    <div class="sun"></div><div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
+    <div class="road"></div><div class="building b1"></div><div class="building b2"></div><div class="building b3"></div>
+    <div class="tree">🌳</div><div class="ramp">♿</div><div class="sign">SANTA<br>CRUZ</div>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div><strong id="statTotal">0</strong><span>Problemas registrados</span></div>
+  <div><strong id="statPending">0</strong><span>Pendentes</span></div>
+  <div><strong id="statProgress">0</strong><span>Em andamento</span></div>
+  <div><strong id="statResolved">0</strong><span>Resolvidos</span></div>
+</section>
+
+<section id="mapa" class="section">
+  <div class="section-heading"><div><span class="eyebrow">MAPA COLABORATIVO</span><h2>Veja os obstáculos da cidade</h2></div><p>Explore as ocorrências registradas e acompanhe o andamento das soluções.</p></div>
+  <div class="filter-row">
+    <div class="chips" id="categoryFilters">
+      <button class="chip active" data-filter="all">Todos</button><button class="chip" data-filter="calçada">🚶 Calçadas</button>
+      <button class="chip" data-filter="obstáculo">⚠️ Obstáculos</button><button class="chip" data-filter="acessibilidade">🦽 Acessibilidade</button>
+      <button class="chip" data-filter="travessia">🚦 Travessias</button><button class="chip" data-filter="sinalização">🚧 Sinalização</button><button class="chip" data-filter="resolvido">Resolvidos</button>
+    </div>
+    <select id="priorityFilter" class="select"><option value="all">Todas as prioridades</option><option>Baixa</option><option>Média</option><option>Alta</option></select>
+    <select id="statusFilter" class="select"><option value="all">Todos os status</option><option>Pendente</option><option>Em análise</option><option>Em andamento</option><option>Resolvido</option></select>
+  </div>
+  <div id="map" class="map"></div>
+  <div class="legend"><span><i class="dot green"></i> Acessibilidade</span><span><i class="dot orange"></i> Problema</span><span><i class="dot blue"></i> Andamento</span><span><i class="dot gray"></i> Resolvido</span></div>
+</section>
+
+<section id="registrar" class="section soft">
+  <div class="section-heading"><div><span class="eyebrow">PARTICIPE</span><h2>Encontrou um problema?</h2></div><p>Envie uma ocorrência. Ela começará como <b>Pendente • 0%</b> e poderá ser acompanhada no mapa.</p></div>
+  <form id="reportForm" class="form-card">
+    <div class="form-grid">
+      <label>Nome do problema<input required name="title" placeholder="Ex.: Calçada quebrada na praça"></label>
+      <label>Categoria<select required name="type"><option value="acessibilidade">🦽 Acessibilidade</option><option value="calçada">🚶 Calçada</option><option value="obstáculo">⚠️ Obstáculo</option><option value="travessia">🚦 Travessia</option><option value="sinalização">🚧 Sinalização</option><option value="ponto positivo">👍 Ponto positivo</option><option value="outro">📍 Outro</option></select></label>
+      <label class="full">Descrição<textarea required name="description" rows="4" placeholder="Conte o que está acontecendo e por que isso dificulta a circulação."></textarea></label>
+      <label>Prioridade<select required name="priority"><option>Baixa</option><option selected>Média</option><option>Alta</option></select></label>
+      <label>Endereço<input required name="address" placeholder="Rua, número ou ponto de referência"></label>
+      <label>Latitude<input id="latitude" name="latitude" type="number" step="any" placeholder="-22.8980"></label>
+      <label>Longitude<input id="longitude" name="longitude" type="number" step="any" placeholder="-49.6320"></label>
+      <label>Foto<input name="photo" type="file" accept="image/*"></label>
+      <label>Seu nome <span class="muted">(opcional)</span><input name="name" placeholder="Como podemos chamar você?"></label>
+      <label>E-mail <span class="muted">(opcional)</span><input name="email" type="email" placeholder="voce@email.com"></label>
+    </div>
+    <div class="form-actions"><button type="button" class="btn btn-outline" id="useLocation">📍 Usar minha localização</button><button class="btn btn-primary" type="submit">Enviar ocorrência</button></div>
+    <small id="reportMessage" class="form-message"></small>
+  </form>
+</section>
+
+<section id="como-funciona" class="section">
+  <div class="section-heading centered"><span class="eyebrow">COMO FUNCIONA</span><h2>Do problema à solução</h2></div>
+  <div class="steps">
+    <article><b>01</b><span>📍</span><h3>Você registra</h3><p>Descreve o problema, informa o local e, se quiser, adiciona uma foto.</p></article>
+    <article><b>02</b><span>🔎</span><h3>Prefeitura analisa</h3><p>A equipe acompanha a ocorrência e define a prioridade e o encaminhamento.</p></article>
+    <article><b>03</b><span>🔧</span><h3>Serviço avança</h3><p>O progresso é atualizado de 0% a 100%, com uma linha do tempo pública.</p></article>
+    <article><b>04</b><span>✅</span><h3>Você acompanha</h3><p>Consulte o mapa e veja quando a ocorrência chegar a 100%.</p></article>
+  </div>
+</section>
+
+<section id="solucoes" class="section soft">
+  <div class="section-heading centered"><span class="eyebrow">POSSÍVEIS SOLUÇÕES</span><h2>Pequenas mudanças, grandes impactos</h2></div>
+  <div class="solution-grid">
+    <article class="solution"><span>🚶</span><h3>Calçadas acessíveis</h3><p>Calçadas mais largas, niveladas e livres de obstáculos.</p></article>
+    <article class="solution"><span>♿</span><h3>Rampas</h3><p>Instalação e manutenção de rampas de acessibilidade.</p></article>
+    <article class="solution"><span>🟨</span><h3>Piso tátil</h3><p>Sinalização tátil para pessoas com deficiência visual.</p></article>
+    <article class="solution"><span>🚦</span><h3>Travessias seguras</h3><p>Melhoria de faixas de pedestres e sinalização.</p></article>
+    <article class="solution"><span>💡</span><h3>Iluminação</h3><p>Melhoria da iluminação em pontos de circulação.</p></article>
+    <article class="solution"><span>📢</span><h3>Conscientização</h3><p>Campanhas para orientar a população sobre acessibilidade.</p></article>
+  </div>
+</section>
+
+<section id="sobre" class="section">
+  <div class="design-thinking">
+    <div><span class="eyebrow">DESIGN THINKING</span><h2>Um projeto pensado com as pessoas</h2><p>O Santa Cruz Acessível aplica cinco etapas para transformar necessidades reais em uma proposta de solução.</p></div>
+    <div class="dt-grid"><article><b>1</b><h3>Empatia</h3><p>Entender as dificuldades enfrentadas pelos moradores.</p></article><article><b>2</b><h3>Definição</h3><p>Identificar os principais problemas de mobilidade e acessibilidade.</p></article><article><b>3</b><h3>Ideação</h3><p>Pensar em soluções possíveis.</p></article><article><b>4</b><h3>Prototipagem</h3><p>Criar o site e o mapa colaborativo.</p></article><article><b>5</b><h3>Teste</h3><p>Apresentar o projeto e coletar opiniões.</p></article></div>
+  </div>
+</section>
+
+<section class="campaign"><div><span class="eyebrow">CAMPANHA</span><h2>Santa Cruz é para todos.</h2><p>“O que parece um pequeno obstáculo para você pode ser uma grande barreira para outra pessoa.”</p><strong>Acessibilidade não é favor. É direito.</strong></div><div class="people">♿ &nbsp; 👵 &nbsp; 🧒 &nbsp; 👶 &nbsp; 🚶 &nbsp; 🚲</div></section>
+
+<section class="section">
+  <div class="section-heading centered"><span class="eyebrow">ESTATÍSTICAS</span><h2>Como está nossa cidade?</h2></div>
+  <div class="chart-card"><canvas id="reportsChart"></canvas></div>
+</section>
+
+<section class="section soft">
+  <div class="feedback-card"><div><span class="eyebrow">FEEDBACK</span><h2>O que você acha do projeto?</h2><p>Ajude os estudantes a melhorar o protótipo.</p></div>
+  <form id="feedbackForm"><input name="name" placeholder="Seu nome (opcional)"><div class="stars" role="radiogroup" aria-label="Avaliação"><button type="button" data-star="1">★</button><button type="button" data-star="2">★</button><button type="button" data-star="3">★</button><button type="button" data-star="4">★</button><button type="button" data-star="5">★</button></div><textarea required name="message" rows="3" placeholder="Seu comentário"></textarea><button class="btn btn-primary">Enviar feedback</button><small id="feedbackMessage" class="form-message"></small></form></div>
+</section>
+
+<section id="prefeitura" class="section admin-section">
+  <div class="admin-login" id="adminLogin">
+    <span class="eyebrow">ACESSO RESTRITO</span><h2>🏛️ Acesso da Prefeitura</h2><p>Somente usuários com perfil <b>prefeitura</b> ou <b>admin</b> podem acessar o painel.</p>
+    <form id="loginForm"><label>E-mail<input required name="email" type="email"></label><label>Senha<input required name="password" type="password"></label><button class="btn btn-dark">Entrar</button><small id="loginMessage" class="form-message"></small></form>
+  </div>
+  <div class="dashboard hidden" id="dashboard">
+    <div class="dashboard-head"><div><span class="eyebrow">ÁREA ADMINISTRATIVA</span><h2>🏛️ Painel da Prefeitura</h2><p>Gerenciamento de ocorrências de mobilidade e acessibilidade</p></div><button class="btn btn-outline" id="logout">Sair</button></div>
+    <div class="dash-cards"><div><span>📋</span><b id="dReceived">0</b><small>Problemas recebidos</small></div><div><span>🔎</span><b id="dAnalysis">0</b><small>Em análise</small></div><div><span>🔧</span><b id="dProgress">0</b><small>Em andamento</small></div><div><span>✅</span><b id="dResolved">0</b><small>Resolvidos</small></div><div><span>📊</span><b id="dAverage">0%</b><small>Média de resolução</small></div></div>
+    <div class="table-wrap"><table><thead><tr><th>Problema</th><th>Categoria</th><th>Local</th><th>Prioridade</th><th>Status</th><th>Andamento</th><th>Data</th><th>Ações</th></tr></thead><tbody id="reportsTable"></tbody></table></div>
+  </div>
+</section>
+</main>
+
+<footer><div><b>Santa Cruz Acessível</b><p>Projeto escolar de Design Thinking • Protótipo acadêmico</p></div><p>“Uma cidade melhor começa quando conseguimos enxergar seus obstáculos.”</p></footer>
+
+<div class="modal hidden" id="reportModal"><div class="modal-box"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
+<div id="toast" class="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/config.js"></script><script src="js/app.js"></script>
+</body>
+</html>
