@@ -146,104 +146,23 @@ function initMap(){
     }
   ).addTo(map);
 
- map.on("click", async function (e) {
-    const lat = e.latlng.lat;
-    const lon = e.latlng.lng;
+  map.on("click", e => {
 
-    // Preenche latitude e longitude
-    const latitudeInput = document.getElementById("latitude");
-    const longitudeInput = document.getElementById("longitude");
-    const localInput = document.getElementById("local");
+    if(!selectingLocation) return;
 
-    if (latitudeInput) {
-        latitudeInput.value = lat.toFixed(6);
-    }
+    document.getElementById("latitude").value =
+      e.latlng.lat.toFixed(6);
 
-    if (longitudeInput) {
-        longitudeInput.value = lon.toFixed(6);
-    }
+    document.getElementById("longitude").value =
+      e.latlng.lng.toFixed(6);
 
-    // Coloca/move o marcador
-    if (marcadorSelecionado) {
-        marcadorSelecionado.setLatLng(e.latlng);
-    } else {
-        marcadorSelecionado = L.marker(e.latlng).addTo(map);
-    }
+    selectingLocation = false;
 
-    // Mensagem enquanto procura o endereço
-    if (localInput) {
-        localInput.value = "Buscando endereço...";
-    }
+    showToast("Localização selecionada no mapa.");
 
-    try {
-        const resposta = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`
-        );
-
-        if (!resposta.ok) {
-            throw new Error("Não foi possível consultar o endereço.");
-        }
-
-        const dados = await resposta.json();
-
-        if (dados && dados.address) {
-            const endereco = dados.address;
-
-            const rua =
-                endereco.road ||
-                endereco.pedestrian ||
-                endereco.footway ||
-                endereco.path ||
-                "";
-
-            const numero = endereco.house_number || "";
-
-            let textoEndereco = rua;
-
-            if (numero) {
-                textoEndereco += `, ${numero}`;
-            }
-
-            if (!textoEndereco) {
-                textoEndereco = dados.display_name || "Endereço não encontrado";
-            }
-
-            if (localInput) {
-                localInput.value = textoEndereco;
-            }
-
-            if (typeof mostrarToast === "function") {
-                mostrarToast("📍 Endereço localizado automaticamente!");
-            }
-        } else {
-            if (localInput) {
-                localInput.value = "Endereço não encontrado";
-            }
-        }
-
-    } catch (erro) {
-        console.error("Erro ao buscar endereço:", erro);
-
-        if (localInput) {
-            localInput.value = "";
-            localInput.placeholder = "Digite o endereço manualmente";
-        }
-
-        if (typeof mostrarToast === "function") {
-            mostrarToast("Não foi possível localizar a rua. Digite o endereço.");
-        }
-    }
-
-    // Leva o usuário até o formulário
-    const problemaForm = document.getElementById("problema");
-
-    if (problemaForm) {
-        problemaForm.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    }
-});
+    document.getElementById("problema")
+      .scrollIntoView({behavior:"smooth"});
+  });
 }
 
 
