@@ -241,34 +241,54 @@
 
       <div class="form-grid">
 
-<label for="latitude">Latitude</label>
-<input
-    type="text"
-    id="latitude"
-    name="latitude"
-    readonly
->
+<div class="location-section">
 
-<label for="longitude">Longitude</label>
-<input
-    type="text"
-    id="longitude"
-    name="longitude"
-    readonly
->
+    <label for="local">Endereço / local do problema</label>
 
-      </div>
+    <input
+        type="text"
+        id="local"
+        name="local"
+        placeholder="Digite o endereço ou selecione no mapa"
+    >
 
-      <div class="location-buttons">
-        <button type="button" class="btn btn-secondary"
-                onclick="useLocation()">
-          📍 Usar minha localização
+    <div class="location-buttons">
+        <button type="button" id="usarLocalizacao">
+            📍 Usar minha localização
         </button>
 
-        <button type="button" class="btn btn-secondary"
-                onclick="chooseLocation()">
-          🗺️ Escolher no mapa
+        <button type="button" id="selecionarMapa">
+            🗺️ Selecionar no mapa
         </button>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="coordinates">
+        <div>
+            <label for="latitude">Latitude</label>
+            <input
+                type="text"
+                id="latitude"
+                name="latitude"
+                readonly
+                placeholder="Preenchida automaticamente"
+            >
+        </div>
+
+        <div>
+            <label for="longitude">Longitude</label>
+            <input
+                type="text"
+                id="longitude"
+                name="longitude"
+                readonly
+                placeholder="Preenchida automaticamente"
+            >
+        </div>
+    </div>
+
+</div>
       </div>
 
       <label>
