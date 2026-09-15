@@ -146,15 +146,15 @@ function initMap(){
     }
   ).addTo(map);
 
- map.on("click", async function (e) {
+map.on("click", async function (e) {
     const lat = e.latlng.lat;
     const lon = e.latlng.lng;
 
-    // Preenche latitude e longitude
     const latitudeInput = document.getElementById("latitude");
     const longitudeInput = document.getElementById("longitude");
     const localInput = document.getElementById("local");
 
+    // Preenche as coordenadas automaticamente
     if (latitudeInput) {
         latitudeInput.value = lat.toFixed(6);
     }
@@ -163,16 +163,16 @@ function initMap(){
         longitudeInput.value = lon.toFixed(6);
     }
 
-    // Coloca/move o marcador
+    // Cria ou move o marcador
     if (marcadorSelecionado) {
         marcadorSelecionado.setLatLng(e.latlng);
     } else {
         marcadorSelecionado = L.marker(e.latlng).addTo(map);
     }
 
-    // Mensagem enquanto procura o endereço
+    // Mostra que está procurando o endereço
     if (localInput) {
-        localInput.value = "Buscando endereço...";
+        localInput.value = "Buscando rua e número...";
     }
 
     try {
@@ -181,60 +181,79 @@ function initMap(){
         );
 
         if (!resposta.ok) {
-            throw new Error("Não foi possível consultar o endereço.");
+            throw new Error("Erro ao consultar o endereço.");
         }
 
         const dados = await resposta.json();
 
         if (dados && dados.address) {
+
             const endereco = dados.address;
 
+            // Procura o nome da rua
             const rua =
                 endereco.road ||
                 endereco.pedestrian ||
                 endereco.footway ||
                 endereco.path ||
+                endereco.residential ||
                 "";
 
-            const numero = endereco.house_number || "";
+            // Procura o número da residência
+            const numero =
+                endereco.house_number ||
+                "";
 
-            let textoEndereco = rua;
+            // Monta "Rua Nome, 123"
+            let textoEndereco = "";
 
-            if (numero) {
-                textoEndereco += `, ${numero}`;
-            }
-
-            if (!textoEndereco) {
+            if (rua && numero) {
+                textoEndereco = `${rua}, ${numero}`;
+            } else if (rua) {
+                textoEndereco = rua;
+            } else if (numero) {
+                textoEndereco = `Número ${numero}`;
+            } else {
                 textoEndereco = dados.display_name || "Endereço não encontrado";
             }
 
+            // Preenche o campo de endereço
             if (localInput) {
                 localInput.value = textoEndereco;
             }
 
             if (typeof mostrarToast === "function") {
-                mostrarToast("📍 Endereço localizado automaticamente!");
+                mostrarToast(`📍 ${textoEndereco}`);
             }
+
         } else {
+
             if (localInput) {
-                localInput.value = "Endereço não encontrado";
+                localInput.value = "";
+                localInput.placeholder =
+                    "Não foi possível encontrar a rua. Digite manualmente.";
             }
+
         }
 
     } catch (erro) {
+
         console.error("Erro ao buscar endereço:", erro);
 
         if (localInput) {
             localInput.value = "";
-            localInput.placeholder = "Digite o endereço manualmente";
+            localInput.placeholder =
+                "Digite a rua e o número manualmente";
         }
 
         if (typeof mostrarToast === "function") {
-            mostrarToast("Não foi possível localizar a rua. Digite o endereço.");
+            mostrarToast(
+                "Não foi possível localizar o endereço. Você pode digitar manualmente."
+            );
         }
     }
 
-    // Leva o usuário até o formulário
+    // Vai até o formulário
     const problemaForm = document.getElementById("problema");
 
     if (problemaForm) {
