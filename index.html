@@ -228,67 +228,38 @@
           </select>
         </label>
 
-          <label for="local">Endereço</label>
-             <input
-                type="text"
-                id="local"
-                name="local"
-                placeholder="Clique no mapa ou digite o endereço"
-            >
-
+        <label>
+          Endereço
+          <input id="address" required
+                 placeholder="Rua, número ou referência">
+        </label>
 
       </div>
 
       <div class="form-grid">
 
-<div class="location-section">
+        <label>
+          Latitude
+          <input id="latitude" type="number" step="any" required>
+        </label>
 
-    <label for="local">Endereço / local do problema</label>
+        <label>
+          Longitude
+          <input id="longitude" type="number" step="any" required>
+        </label>
 
-    <input
-        type="text"
-        id="local"
-        name="local"
-        placeholder="Digite o endereço ou selecione no mapa"
-    >
+      </div>
 
-    <div class="location-buttons">
-        <button type="button" id="usarLocalizacao">
-            📍 Usar minha localização
+      <div class="location-buttons">
+        <button type="button" class="btn btn-secondary"
+                onclick="useLocation()">
+          📍 Usar minha localização
         </button>
 
-        <button type="button" id="selecionarMapa">
-            🗺️ Selecionar no mapa
+        <button type="button" class="btn btn-secondary"
+                onclick="chooseLocation()">
+          🗺️ Escolher no mapa
         </button>
-    </div>
-
-    <div id="map"></div>
-
-    <div class="coordinates">
-        <div>
-            <label for="latitude">Latitude</label>
-            <input
-                type="text"
-                id="latitude"
-                name="latitude"
-                readonly
-                placeholder="Preenchida automaticamente"
-            >
-        </div>
-
-        <div>
-            <label for="longitude">Longitude</label>
-            <input
-                type="text"
-                id="longitude"
-                name="longitude"
-                readonly
-                placeholder="Preenchida automaticamente"
-            >
-        </div>
-    </div>
-
-</div>
       </div>
 
       <label>
@@ -566,5 +537,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+</body>
+</html>
 </body>
 </html>
