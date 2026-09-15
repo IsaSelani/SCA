@@ -1,49 +1,119 @@
 # Santa Cruz Acessível
 
-Protótipo escolar de Design Thinking para participação cidadã, mobilidade e acessibilidade em Santa Cruz do Rio Pardo — SP.
+Projeto de Design Thinking e participação cidadã para
+Santa Cruz do Rio Pardo - SP.
 
-## Arquivos
-- `index.html` — interface completa.
-- `css/styles.css` — identidade visual e responsividade.
-- `js/app.js` — mapa, filtros, formulários, autenticação, dashboard e tempo real.
-- `js/config.js` — URL e chave pública do Supabase.
-- `supabase.sql` — tabelas, RLS, Storage, trigger e dados fictícios.
-- `README.md` — este guia.
+## Tecnologias
 
-## 1. Criar o projeto no Supabase
-1. Crie um projeto em https://supabase.com/.
-2. Abra **SQL Editor** e execute todo o conteúdo de `supabase.sql`.
-3. Em **Project Settings → API**, copie a **Project URL** e a chave **anon/public**.
-4. Cole os valores em `js/config.js`.
-5. Nunca use a chave `service_role` no frontend.
+- HTML
+- CSS
+- JavaScript
+- Leaflet
+- OpenStreetMap
+- Supabase
+- GitHub Pages
 
-## 2. Criar o primeiro usuário da Prefeitura
-1. Em **Authentication → Users**, crie um usuário com e-mail e senha.
-2. Copie o UUID desse usuário.
-3. No SQL Editor, execute:
-   `update public.profiles set role='prefeitura' where id='UUID_DO_USUARIO';`
-4. Para administrador, use `role='admin'`.
+## Funcionalidades
 
-## 3. Fotos
-O SQL cria o bucket `report-photos` no Supabase Storage. A interface envia fotos para esse bucket e salva a URL em `reports.photo_url`.
+- Cadastro de usuários
+- Login
+- Mapa colaborativo
+- Registro de problemas
+- Localização pelo navegador
+- Seleção de localização no mapa
+- Envio de fotos
+- Categorias
+- Prioridades
+- Status
+- Progresso de 0% a 100%
+- Área da Prefeitura
+- Área de administrador
+- Estatísticas
 
-Para produção, recomenda-se restringir upload por autenticação e criar um fluxo de aprovação das imagens antes de torná-las públicas.
+## Estrutura
 
-## 4. Rodar localmente
-Como o projeto usa módulos/CDNs e geolocalização, é melhor servir a pasta por HTTP:
-- VS Code + extensão Live Server; ou
-- `python -m http.server 8000`
-Depois abra `http://localhost:8000`.
+santa-cruz-acessivel/
 
-## 5. Publicar
-- **Netlify:** arraste a pasta para o deploy manual ou conecte um repositório Git.
-- **Vercel:** importe o repositório.
-- **GitHub Pages:** publique a raiz do projeto.
+index.html
 
-## 6. Segurança
-A chave `anon/public` é própria para frontend. A segurança real depende das políticas RLS no Supabase. O dashboard verifica a role em `profiles`, e somente `prefeitura`/`admin` recebem autorização para alterar ocorrências.
+css/
+  styles.css
 
-## 7. Observações
-- Sem Supabase configurado, o site entra em modo demonstração e mostra ocorrências fictícias; ele não substitui o banco online.
-- Depois de configurar o Supabase, os dados passam a ser gravados online e as alterações em `reports` são recebidas em tempo real pelo canal Realtime.
-- O heatmap não foi incluído como camada externa para manter o protótipo simples e leve; o mapa colaborativo e os filtros já estão funcionais. Para adicionar heatmap, pode-se incluir `leaflet.heat` e uma camada com as coordenadas das ocorrências.
+js/
+  config.js
+  app.js
+
+supabase.sql
+
+README.md
+
+## Configuração do Supabase
+
+1. Crie um projeto no Supabase.
+
+2. Abra o SQL Editor.
+
+3. Cole o conteúdo de `supabase.sql`.
+
+4. Execute o SQL.
+
+5. Vá em Project Settings > API.
+
+6. Copie a Project URL.
+
+7. Copie a chave pública anon.
+
+8. Abra:
+
+js/config.js
+
+9. Coloque os dois valores:
+
+const SUPABASE_URL = "...";
+
+const SUPABASE_ANON_KEY = "...";
+
+Nunca coloque a chave service_role no GitHub.
+
+## Criar usuário da Prefeitura
+
+Primeiro crie uma conta normalmente pelo site.
+
+Depois, no SQL Editor do Supabase, descubra o e-mail
+da conta e execute:
+
+update public.profiles
+set role = 'prefeitura'
+where email = 'EMAIL_DA_PREFEITURA';
+
+Para administrador:
+
+update public.profiles
+set role = 'admin'
+where email = 'EMAIL_DO_ADMIN';
+
+## GitHub Pages
+
+Depois de criar os arquivos no GitHub:
+
+1. Abra Settings.
+2. Abra Pages.
+3. Em Source escolha GitHub Actions ou Deploy from branch.
+4. Escolha a branch principal.
+5. Salve.
+6. Aguarde a publicação.
+
+O site poderá ser acessado pelo endereço fornecido pelo GitHub Pages.
+
+## Segurança
+
+A chave `anon/public` pode ser usada no frontend.
+
+Nunca publique:
+
+- service_role key
+- senha do banco
+- senha de usuários
+- credenciais administrativas
+
+A segurança dos dados é controlada pelas políticas RLS do Supabase.
