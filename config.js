@@ -7,7 +7,6 @@
   - outras chaves secretas
 */
 
-const SUPABASE_URL = "COLE_A_URL_DO_SEU_SUPABASE_AQUI";
+const SUPABASE_URL = "https://vhpelmtgotuyjhysommd.supabase.co";
 
-const SUPABASE_ANON_KEY =
-  "COLE_A_CHAVE_ANON_PUBLIC_DO_SEU_SUPABASE_AQUI";
+const SUPABASE_ANON_KEY = "sb_publishable_caAypw2xMRKwLo12Cu-mGg_VRAI1sYq";
