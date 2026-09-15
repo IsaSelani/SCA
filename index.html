@@ -230,8 +230,13 @@
 
         <label>
           Endereço
-          <input id="address" required
-                 placeholder="Rua, número ou referência">
+          <label for="local">Endereço</label>
+             <input
+                type="text"
+                id="local"
+                name="local"
+                placeholder="Clique no mapa ou digite o endereço"
+            >
         </label>
 
       </div>
@@ -240,12 +245,22 @@
 
         <label>
           Latitude
-          <input id="latitude" type="number" step="any" required>
+          <input
+            type="text"
+            id="latitude"
+            name="latitude"
+            readonly
+        >
         </label>
 
         <label>
           Longitude
-          <input id="longitude" type="number" step="any" required>
+          <input
+             type="text"
+             id="longitude"
+             name="longitude"
+             readonly
+         >
         </label>
 
       </div>
